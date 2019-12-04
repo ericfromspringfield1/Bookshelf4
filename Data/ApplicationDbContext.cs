@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Bookshelf4.Models
 {
@@ -12,10 +13,18 @@ namespace Bookshelf4.Models
         public DbSet<Author> Author { get; set; }
         public DbSet<Book> Book { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.Books)
+                .WithOne(b => b.Owner)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Author>()
+                .Property("FirstName")
+                .HasDefaultValue("Sam");
             // Create a new user for Identity Framework
             ApplicationUser user = new ApplicationUser
             {
@@ -32,7 +41,7 @@ namespace Bookshelf4.Models
             };
             var passwordHash = new PasswordHasher<ApplicationUser>();
             user.PasswordHash = passwordHash.HashPassword(user, "Admin8*");
-            modelBuilder.Entity<ApplicationUser>().HasData(user);
+            builder.Entity<ApplicationUser>().HasData(user);
 
             ApplicationUser paul = new ApplicationUser
             {
@@ -48,8 +57,29 @@ namespace Bookshelf4.Models
                 Id = "00000000-ffff-ffff-ffff-ffffffffffffg"
             };
             paul.PasswordHash = passwordHash.HashPassword(paul, "Admin8*");
-            modelBuilder.Entity<ApplicationUser>().HasData(paul);
+            builder.Entity<ApplicationUser>().HasData(paul);
 
+            Author haroldw = new Author()
+            {
+                Id = 1,
+                FirstName = "Harold",
+                LastName = "Whitecastle",
+                PreferredGenre = "Square Burgers",
+                UserCreatedId = user.Id
+            };
+            builder.Entity<Author>().HasData(haroldw);
+
+            Book haroldkumar = new Book()
+            {
+                Id = 1,
+                Title = "Harold & Kumar Go To White Castle",
+                ISBN = "9092939449",
+                Genre = "Squre Burgers",
+                PublishDate = new DateTime(2005, 11, 14),
+                AuthorId = haroldw.Id,
+                OwnerId = user.Id
+            };
+            builder.Entity<Book>().HasData(haroldkumar);
 
         }
     }

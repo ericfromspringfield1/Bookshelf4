@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Bookshelf4.Migrations
 {
-    public partial class IntitialCreate : Migration
+    public partial class hey : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -155,22 +155,29 @@ namespace Bookshelf4.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Authors",
+                name: "Author",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(nullable: false),
+                    FirstName = table.Column<string>(nullable: false, defaultValue: "Sam"),
                     LastName = table.Column<string>(nullable: false),
                     Penname = table.Column<string>(nullable: true),
                     PreferredGenre = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: true),
+                    UserCreatedId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Authors", x => x.Id);
+                    table.PrimaryKey("PK_Author", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Authors_AspNetUsers_UserId",
+                        name: "FK_Author_AspNetUsers_UserCreatedId",
+                        column: x => x.UserCreatedId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Author_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -178,7 +185,7 @@ namespace Bookshelf4.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "Book",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -188,20 +195,19 @@ namespace Bookshelf4.Migrations
                     Genre = table.Column<string>(nullable: true),
                     PublishDate = table.Column<DateTime>(nullable: false),
                     AuthorId = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(nullable: false),
-                    OwnerId = table.Column<string>(nullable: true)
+                    OwnerId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_Book", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Books_Authors_AuthorId",
+                        name: "FK_Book_Author_AuthorId",
                         column: x => x.AuthorId,
-                        principalTable: "Authors",
+                        principalTable: "Author",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Books_AspNetUsers_OwnerId",
+                        name: "FK_Book_AspNetUsers_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -211,12 +217,22 @@ namespace Bookshelf4.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffff", 0, "cfa849ba-c206-4fd4-8655-7d6742edac2b", "admin@admin.com", true, "admin", "admin", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEOfeKGJrn/ND6DTZORBVcMyIORXV1F2cfdM1v6dCd+Fc/FQ4PL9hTObPkbeK3ggLqg==", null, false, "7f434309-a4d9-48e9-9ebb-8803db794577", false, "admin@admin.com" });
+                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffff", 0, "0328fc50-ad44-483d-a262-a1b45b4d6f87", "admin@admin.com", true, "admin", "admin", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEAmrvEaTpRjoadFfgHz3np3HH8nF2vIhATHjjP4FgESsHtAbCEtIAtyo6D0UqM7MeA==", null, false, "7f434309-a4d9-48e9-9ebb-8803db794577", false, "admin@admin.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffffg", 0, "f073aa00-3e9a-4b66-8fe9-9cb577377092", "paul@admin.com", true, "Paul", "Mudd", false, null, "PAUL@ADMIN.COM", "PAUL@ADMIN.COM", "AQAAAAEAACcQAAAAEMv7N3KLnWIVsFDA/OnZ0uhPR73FWyh9vilON9lxc/eDp79A8nkGbzM/2Wo4p31czw==", null, false, "7f434309-a4d9-48e9-9ebb-8803db7945771", false, "paul@admin.com" });
+                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffffg", 0, "75b3e5ce-2478-41c8-ae2f-15ad3d210017", "paul@admin.com", true, "Paul", "Mudd", false, null, "PAUL@ADMIN.COM", "PAUL@ADMIN.COM", "AQAAAAEAACcQAAAAEOj0nT74uW7Z6Di2gXV97CIo8Jl0k2fnJv8GFoMJWpLWJbbXmBx7H2/BuD+kZ3IG3g==", null, false, "7f434309-a4d9-48e9-9ebb-8803db7945771", false, "paul@admin.com" });
+
+            migrationBuilder.InsertData(
+                table: "Author",
+                columns: new[] { "Id", "FirstName", "LastName", "Penname", "PreferredGenre", "UserCreatedId", "UserId" },
+                values: new object[] { 1, "Harold", "Whitecastle", null, "Square Burgers", "00000000-ffff-ffff-ffff-ffffffffffff", null });
+
+            migrationBuilder.InsertData(
+                table: "Book",
+                columns: new[] { "Id", "AuthorId", "Genre", "ISBN", "OwnerId", "PublishDate", "Title" },
+                values: new object[] { 1, 1, "Squre Burgers", "9092939449", "00000000-ffff-ffff-ffff-ffffffffffff", new DateTime(2005, 11, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Harold & Kumar Go To White Castle" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -258,18 +274,23 @@ namespace Bookshelf4.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Authors_UserId",
-                table: "Authors",
+                name: "IX_Author_UserCreatedId",
+                table: "Author",
+                column: "UserCreatedId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Author_UserId",
+                table: "Author",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_AuthorId",
-                table: "Books",
+                name: "IX_Book_AuthorId",
+                table: "Book",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_OwnerId",
-                table: "Books",
+                name: "IX_Book_OwnerId",
+                table: "Book",
                 column: "OwnerId");
         }
 
@@ -291,13 +312,13 @@ namespace Bookshelf4.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "Book");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Authors");
+                name: "Author");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

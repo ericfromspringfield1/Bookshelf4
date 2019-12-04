@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookshelf4.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191203234442_BookUpdateWithAuthor")]
-    partial class BookUpdateWithAuthor
+    [Migration("20191204064226_6666353")]
+    partial class _6666353
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -98,7 +98,7 @@ namespace Bookshelf4.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8338e36c-10eb-45ae-8d81-3339a5d892b0",
+                            ConcurrencyStamp = "075e931e-8015-41ec-8ee2-58abcbef51bf",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "admin",
@@ -106,7 +106,7 @@ namespace Bookshelf4.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEENHdX9Br7e34KwNIwQARREgj2UwL4QsZLawxEi19K3UlWuTmX6HdZ2ZvZbCIBCABg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN1m2YpExKKBHzHy2TqfUdp9J1Op2Q3Wmz8nK8T3LE1NSorjCpX5rY69Wj5traEysw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
@@ -116,7 +116,7 @@ namespace Bookshelf4.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffffg",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6be05ec4-86ff-458a-a313-59cdeff93b43",
+                            ConcurrencyStamp = "7d132a40-05cb-4aeb-a3d8-dcc0842521d8",
                             Email = "paul@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Paul",
@@ -124,7 +124,7 @@ namespace Bookshelf4.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "PAUL@ADMIN.COM",
                             NormalizedUserName = "PAUL@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENuZTnvLY+mXFEKi+SuogEdZlf0TSpq/jMdjA2LpoR9x0NX+BTWrNje3MN6TKBI2SA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGpn7RgK6jksw1ixjalBnDT4FZ3wY068kDWM7d456GVfpn8ZfRDvxwRQ7i3+qGQ9Yw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db7945771",
                             TwoFactorEnabled = false,
@@ -141,7 +141,9 @@ namespace Bookshelf4.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Sam");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -154,7 +156,6 @@ namespace Bookshelf4.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserCreatedId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
@@ -167,6 +168,16 @@ namespace Bookshelf4.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Author");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Harold",
+                            LastName = "Whitecastle",
+                            PreferredGenre = "Square Burgers",
+                            UserCreatedId = "00000000-ffff-ffff-ffff-ffffffffffff"
+                        });
                 });
 
             modelBuilder.Entity("Bookshelf4.Models.Book", b =>
@@ -205,6 +216,18 @@ namespace Bookshelf4.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Book");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AuthorId = 1,
+                            Genre = "Squre Burgers",
+                            ISBN = "9092939449",
+                            OwnerId = "00000000-ffff-ffff-ffff-ffffffffffff",
+                            PublishDate = new DateTime(2005, 11, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Harold & Kumar Go To White Castle"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -346,9 +369,7 @@ namespace Bookshelf4.Migrations
                 {
                     b.HasOne("Bookshelf4.Models.ApplicationUser", "UserCreated")
                         .WithMany()
-                        .HasForeignKey("UserCreatedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserCreatedId");
 
                     b.HasOne("Bookshelf4.Models.ApplicationUser", "User")
                         .WithMany()
@@ -366,7 +387,7 @@ namespace Bookshelf4.Migrations
                     b.HasOne("Bookshelf4.Models.ApplicationUser", "Owner")
                         .WithMany("Books")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

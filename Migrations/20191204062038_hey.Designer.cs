@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookshelf4.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191202052725_booksAuthors")]
-    partial class booksAuthors
+    [Migration("20191204062038_hey")]
+    partial class hey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,78 +20,6 @@ namespace Bookshelf4.Migrations
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Bookshelf4.Models.Author", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Penname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferredGenre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Authors");
-                });
-
-            modelBuilder.Entity("Bookshelf4.Models.Book", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Genre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ISBN")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(13)")
-                        .HasMaxLength(13);
-
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("PublishDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Books");
-                });
 
             modelBuilder.Entity("Bookshelf4.Models.ApplicationUser", b =>
                 {
@@ -170,7 +98,7 @@ namespace Bookshelf4.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a861e568-1b3a-40a4-b158-e543e2536464",
+                            ConcurrencyStamp = "0328fc50-ad44-483d-a262-a1b45b4d6f87",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "admin",
@@ -178,7 +106,7 @@ namespace Bookshelf4.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEB7C6lwoBAv5p0Hq0rpBI8k7NXZT/gMtYm3pqZfJwLaVeK94h7CyQSaD594WQPw4IA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAmrvEaTpRjoadFfgHz3np3HH8nF2vIhATHjjP4FgESsHtAbCEtIAtyo6D0UqM7MeA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
@@ -188,7 +116,7 @@ namespace Bookshelf4.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffffg",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5d087172-e0db-4d97-b344-e36ed19a668c",
+                            ConcurrencyStamp = "75b3e5ce-2478-41c8-ae2f-15ad3d210017",
                             Email = "paul@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Paul",
@@ -196,11 +124,109 @@ namespace Bookshelf4.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "PAUL@ADMIN.COM",
                             NormalizedUserName = "PAUL@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECZMzWLVrPsLawQAWXQe38P7PcHptTFKstFxo/VYxgtx7UbTC651Iw5nkFbnYrHdfA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOj0nT74uW7Z6Di2gXV97CIo8Jl0k2fnJv8GFoMJWpLWJbbXmBx7H2/BuD+kZ3IG3g==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db7945771",
                             TwoFactorEnabled = false,
                             UserName = "paul@admin.com"
+                        });
+                });
+
+            modelBuilder.Entity("Bookshelf4.Models.Author", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Sam");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Penname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PreferredGenre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserCreatedId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Author");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Harold",
+                            LastName = "Whitecastle",
+                            PreferredGenre = "Square Burgers",
+                            UserCreatedId = "00000000-ffff-ffff-ffff-ffffffffffff"
+                        });
+                });
+
+            modelBuilder.Entity("Bookshelf4.Models.Book", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Genre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ISBN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(13)")
+                        .HasMaxLength(13);
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("PublishDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Book");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AuthorId = 1,
+                            Genre = "Squre Burgers",
+                            ISBN = "9092939449",
+                            OwnerId = "00000000-ffff-ffff-ffff-ffffffffffff",
+                            PublishDate = new DateTime(2005, 11, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Harold & Kumar Go To White Castle"
                         });
                 });
 
@@ -341,6 +367,10 @@ namespace Bookshelf4.Migrations
 
             modelBuilder.Entity("Bookshelf4.Models.Author", b =>
                 {
+                    b.HasOne("Bookshelf4.Models.ApplicationUser", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
                     b.HasOne("Bookshelf4.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -349,14 +379,16 @@ namespace Bookshelf4.Migrations
             modelBuilder.Entity("Bookshelf4.Models.Book", b =>
                 {
                     b.HasOne("Bookshelf4.Models.Author", "Author")
-                        .WithMany("Books")
+                        .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Bookshelf4.Models.ApplicationUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
+                        .WithMany("Books")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

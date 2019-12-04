@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bookshelf4.Models;
-using Bookshelf4.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bookshelf4.Controllers
 {
+    [Authorize]
     public class AuthorsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,7 +28,11 @@ namespace Bookshelf4.Controllers
         // GET: Authors
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Author.Include(a => a.User);
+            // Only show  authors for the current user
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var applicationDbContext = _context.Author
+                                                        
+                                                        .Where(a => a.UserCreatedId == user.Id);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -53,7 +58,6 @@ namespace Bookshelf4.Controllers
         // GET: Authors/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
 
@@ -62,15 +66,17 @@ namespace Bookshelf4.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Penname,PreferredGenre,UserId")] Author author)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Penname,PreferredGenre,UserCreatedId")] Author author)
         {
+            ModelState.Remove("UserCreatedId");
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                author.UserCreatedId = user.Id;
                 _context.Add(author);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", author.UserId);
             return View(author);
         }
 
@@ -87,7 +93,7 @@ namespace Bookshelf4.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", author.UserId);
+            ViewData["UserCreatedId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", author.UserId);
             return View(author);
         }
 
@@ -96,17 +102,20 @@ namespace Bookshelf4.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Penname,PreferredGenre,UserId")] Author author)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,PenName,PreferredGenre,UserCreatedId")] Author author)
         {
             if (id != author.Id)
             {
                 return NotFound();
             }
 
+            ModelState.Remove("UserCreatedId");
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var user = await _userManager.GetUserAsync(HttpContext.User);
+                    author.UserCreatedId = user.Id;
                     _context.Update(author);
                     await _context.SaveChangesAsync();
                 }
@@ -123,7 +132,6 @@ namespace Bookshelf4.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", author.UserId);
             return View(author);
         }
 
@@ -136,7 +144,6 @@ namespace Bookshelf4.Controllers
             }
 
             var author = await _context.Author
-                .Include(a => a.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (author == null)
             {

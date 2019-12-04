@@ -23,7 +23,7 @@ namespace Bookshelf4.Models
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
 
-        [Required]
+      
         public string UserCreatedId { get; set; }
         public ApplicationUser UserCreated { get; set; }
     }
